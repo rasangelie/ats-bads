@@ -35,7 +35,7 @@ class TicketProgress(models.Model):
     
     progress = models.IntegerField(choices=TicketProgressChoices.choices, default=TicketProgressChoices.APPLICATION)
 
-    # user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.TimeField(auto_now_add=True)
 
 
@@ -45,7 +45,7 @@ class JobPosition(models.Model):
 
 class Comment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    # user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.TimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
