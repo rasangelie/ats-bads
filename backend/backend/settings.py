@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tickets',
     'authentication',
+    'schema_viewer',
 ]
 
 MIDDLEWARE = [

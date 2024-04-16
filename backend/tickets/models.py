@@ -10,11 +10,11 @@ class Ticket(models.Model):
     middle_initial = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email_address = models.EmailField()
-    job_position = models.ForeignKey('JobPosition', on_delete=models.CASCADE)
+    job_position = models.OneToOneField('JobPosition', on_delete=models.CASCADE)
     resume_url = models.URLField()
     comments = models.ForeignKey('Comment', on_delete=models.CASCADE)
     tech_stacks = models.ForeignKey('TechStack', on_delete=models.CASCADE)
-    assignees = models.CharField(max_length=100)
+    assignees = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.TimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
