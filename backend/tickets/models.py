@@ -1,4 +1,6 @@
 from django.db import models
+# from django.contrib.auth.models import User
+from authentication.models import User
 import uuid
 
 # Create your models here.
@@ -23,7 +25,16 @@ class Ticket(models.Model):
 class TicketProgress(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     ticket_id = models.ForeignKey(Ticket, on_delete=models.CASCADE)
-    # progress_id = models.ForeignKey(Progress, on_delete=models.CASCADE)
+
+    class TicketProgressChoices(models.IntegerChoices):
+        APPLICATION = 1, 'Application'
+        SCREENING = 2, 'Screening'
+        FOR_REVIEW = 3, 'For Review'
+        INTERVIEWING = 4, 'Interviewing'
+        TRIAL_TEST = 5, 'Trial Test'
+    
+    progress = models.IntegerField(choices=TicketProgressChoices.choices, default=TicketProgressChoices.APPLICATION)
+
     # user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.TimeField(auto_now_add=True)
 
