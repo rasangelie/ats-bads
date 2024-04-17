@@ -12,7 +12,6 @@ class Ticket(models.Model):
     email_address = models.EmailField()
     job_position = models.OneToOneField('JobPosition', on_delete=models.CASCADE)
     resume_url = models.URLField()
-    comments = models.ForeignKey('Comment', on_delete=models.CASCADE)
     tech_stacks = models.ForeignKey('TechStack', on_delete=models.CASCADE)
     assignees = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.TimeField(auto_now_add=True)
@@ -23,9 +22,6 @@ class Ticket(models.Model):
 
     
 class TicketProgress(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    ticket_id = models.ForeignKey(Ticket, on_delete=models.CASCADE)
-
     class TicketProgressChoices(models.IntegerChoices):
         APPLICATION = 1, 'Application'
         SCREENING = 2, 'Screening'
@@ -35,7 +31,9 @@ class TicketProgress(models.Model):
     
     progress = models.IntegerField(choices=TicketProgressChoices.choices, default=TicketProgressChoices.APPLICATION)
 
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.TimeField(auto_now_add=True)
 
 
@@ -45,7 +43,8 @@ class JobPosition(models.Model):
 
 class Comment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ticket = models.ForeignKey(Ticket, related_name='comments', on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.TimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
