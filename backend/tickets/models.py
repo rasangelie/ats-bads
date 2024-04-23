@@ -12,7 +12,7 @@ class Ticket(models.Model):
     email_address = models.EmailField()
     job_position = models.OneToOneField('JobPosition', on_delete=models.CASCADE)
     resume_url = models.URLField()
-    tech_stacks = models.ForeignKey('TechStack', on_delete=models.CASCADE)
+    tech_stacks = models.ManyToManyField('TechStack')
     assignees = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.TimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -53,4 +53,6 @@ class Comment(models.Model):
 class TechStack(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     tech_stack = models.CharField(max_length=100)
+    
+
     
