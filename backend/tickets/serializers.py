@@ -33,6 +33,11 @@ class CommentSerializer(serializers.ModelSerializer):
             'updated_at'
         ]
 
+    def validate_content(self, value):
+        if not value:
+            raise serializers.ValidationError("Content cannot be empty")
+        return value
+
 class TicketSerializer(serializers.ModelSerializer):
     job_position = JobPositionSerializer()
     tech_stacks = TechStackSerializer(many=True)
