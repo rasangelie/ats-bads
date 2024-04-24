@@ -1,42 +1,67 @@
 from rest_framework import serializers
-from .models import Ticket, TicketProgress, JobPosition, Comment, TechStack, User
 
+from .models import Comment, JobPosition, TechStack, Ticket
+from authentication.models import User
+                     
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'
 
 class JobPositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobPosition
-        fields = '__all__'
+        fields = [
+            'id', 
+            'position'
+        ]
 
 class TechStackSerializer(serializers.ModelSerializer):
     class Meta:
         model = TechStack
-        fields = '__all__'
+        fields = [
+            'id', 
+            'tech_stack'
+        ]
 
 class CommentSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = [
+            'id', 
+            'user', 
+            'ticket', 
+            'content', 
+            'created_at', 
+            'updated_at'
+        ]
 
 class TicketSerializer(serializers.ModelSerializer):
-    job_position = JobPositionSerializer(read_only=True)
-    assignees = UserSerializer(read_only=True)
-    tech_stacks = TechStackSerializer(many=True, read_only=True)
+    job_position = JobPositionSerializer()
+    tech_stacks = TechStackSerializer(many=True)
+    comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Ticket
-        fields = '__all__'
+        fields = [
+            'id', 
+            'first_name', 
+            'middle_initial', 
+            'last_name', 
+            'email_address', 
+            'job_position', 
+            'resume_url', 
+            'tech_stacks', 
+            'progress', 
+            'assignees', 
+            'created_at', 
+            'updated_at', 
+            'comments'
+        ]
 
-class TicketProgressSerializer(serializers.ModelSerializer):
-    ticket = TicketSerializer(read_only=True)
-    user = UserSerializer(read_only=True)
-
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TicketProgress
-        fields = '__all__'
+        model = User
+        fields = [
+            'id', 
+            'email', 
+            'role', 
+            
+        ]

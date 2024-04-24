@@ -11,11 +11,11 @@ class User(AbstractUser):
         MANAGER = 2, 'Manager'
         CONTRIBUTOR = 3, 'Contributor'
     
-    # role = models.IntegerField(choices=UserRoleChoices.choices, default=UserRoleChoices.MANAGER)
-    role = models.IntegerField(
-        choices=[(choice.value, choice.name) for choice in UserRoleChoices],
-        default=UserRoleChoices.MANAGER,
-    )
+    role = models.IntegerField(choices=UserRoleChoices.choices, default=UserRoleChoices.MANAGER)
+    # role = models.IntegerField(
+    #     choices=[(choice.value, choice.name) for choice in UserRoleChoices],
+    #     default=UserRoleChoices.MANAGER,
+    # )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     
