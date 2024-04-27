@@ -7,7 +7,7 @@ from .models import User
 
 class UserListCreate(generics.ListCreateAPIView):
     """
-    Provides get and post handlers.
+    Create a user.
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer

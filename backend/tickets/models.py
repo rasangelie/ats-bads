@@ -41,7 +41,7 @@ class Ticket(models.Model):
 
 
     def __str__(self):
-        return self.email_address  
+        return self.last_name.__str__() + ", " + self.first_name.__str__()
 
 
 auditlog.register(Ticket, include_fields=['progress', 'updated_at'])
@@ -65,6 +65,6 @@ class TechStack(models.Model):
     def __str__(self):
         return self.tech_stack
     
-    
+
 
     

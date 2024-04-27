@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+
 from .models import Comment, JobPosition, TechStack, Ticket
 from authentication.models import User
                      
@@ -32,6 +33,7 @@ class CommentSerializer(serializers.ModelSerializer):
             'created_at', 
             'updated_at'
         ]
+        
 
     def validate_content(self, value):
         if not value:
@@ -41,7 +43,7 @@ class CommentSerializer(serializers.ModelSerializer):
 class TicketSerializer(serializers.ModelSerializer):
     job_position = JobPositionSerializer()
     tech_stacks = TechStackSerializer(many=True)
-    comments = CommentSerializer(many=True, read_only=True)
+    ticket_comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Ticket
@@ -58,8 +60,51 @@ class TicketSerializer(serializers.ModelSerializer):
             'assignees', 
             'created_at', 
             'updated_at', 
-            'comments'
+            'ticket_comments'
         ]
+    
+    def create(self, validated_data):
+        job_position_data = validated_data.pop('job_position')
+        tech_stacks_data = validated_data.pop('tech_stacks')
+        
+        # Create and save the JobPosition object before creating the Ticket
+        job_position = JobPosition.objects.create(**job_position_data)
+        
+        # Now you can assign the JobPosition object when creating the Ticket
+        ticket = Ticket.objects.create(job_position=job_position, **validated_data)
+
+        for tech_stack_data in tech_stacks_data:
+            tech_stack = TechStack.objects.create(**tech_stack_data)
+            ticket.tech_stacks.add(tech_stack)
+            
+        return ticket
+    
+    def update(self, instance, validated_data):
+        job_position_data = validated_data.pop('job_position')
+        tech_stacks_data = validated_data.pop('tech_stacks')
+        
+        # Update the JobPosition object before updating the Ticket
+        job_position = instance.job_position
+        job_position.position = job_position_data.get('position', job_position.position)
+        job_position.save()
+        
+        # Now you can update the Ticket object
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.middle_initial = validated_data.get('middle_initial', instance.middle_initial)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.email_address = validated_data.get('email_address', instance.email_address)
+        instance.resume_url = validated_data.get('resume_url', instance.resume_url)
+        instance.progress = validated_data.get('progress', instance.progress)
+        instance.assignees = validated_data.get('assignees', instance.assignees)
+        instance.save()
+        
+        # Update the TechStack objects before updating the Ticket
+        instance.tech_stacks.clear()
+        for tech_stack_data in tech_stacks_data:
+            tech_stack = TechStack.objects.create(**tech_stack_data)
+            instance.tech_stacks.add(tech_stack)
+            
+        return instance
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

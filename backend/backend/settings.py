@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'schema_viewer',
     'rest_framework',
     'auditlog',
+    'drf_spectacular'
 ]
 
 MIDDLEWARE = [
@@ -137,3 +138,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'ATS Tickets',
+    'DESCRIPTION': 'Testing the APIs for ATS Tickets',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
