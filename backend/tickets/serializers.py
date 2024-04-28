@@ -64,13 +64,17 @@ class TicketSerializer(serializers.ModelSerializer):
         ]
     
     def create(self, validated_data):
+        """
+        Create the Ticket object and its related JobPosition and TechStack objects
+        """
+
         job_position_data = validated_data.pop('job_position')
         tech_stacks_data = validated_data.pop('tech_stacks')
         
         # Create and save the JobPosition object before creating the Ticket
         job_position = JobPosition.objects.create(**job_position_data)
         
-        # Now you can assign the JobPosition object when creating the Ticket
+        # Assign the JobPosition object when creating the Ticket
         ticket = Ticket.objects.create(job_position=job_position, **validated_data)
 
         for tech_stack_data in tech_stacks_data:
@@ -80,6 +84,10 @@ class TicketSerializer(serializers.ModelSerializer):
         return ticket
     
     def update(self, instance, validated_data):
+        """
+        Update the Ticket object and its related JobPosition and TechStack objects
+        """
+
         job_position_data = validated_data.pop('job_position')
         tech_stacks_data = validated_data.pop('tech_stacks')
         
@@ -88,7 +96,7 @@ class TicketSerializer(serializers.ModelSerializer):
         job_position.position = job_position_data.get('position', job_position.position)
         job_position.save()
         
-        # Now you can update the Ticket object
+        # Update the Ticket object
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.middle_initial = validated_data.get('middle_initial', instance.middle_initial)
         instance.last_name = validated_data.get('last_name', instance.last_name)

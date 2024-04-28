@@ -16,7 +16,7 @@ from .models import Ticket
 
 class TicketListCreate(GenericAPIView):
     """
-    Creating Ticket 
+    View for creating a ticket
     """
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
@@ -40,5 +40,8 @@ class TicketListCreate(GenericAPIView):
     
 
 class TicketUpdateView(RetrieveUpdateAPIView):
+    """
+    View for updating a ticket
+    """
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
